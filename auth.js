@@ -18,11 +18,15 @@ passport.use(
       //url despues de autenticarse que index tiene un lógica
       callbackURL: "http://localhost:3000/auth/google/callback",
       passReqToCallback: true,
+      pkce: true,
+      state: true
     },
     async function (request, accessToken, refreshToken, profile, done) {
       try {
+        console.log(profile)
         //Buscar un usuario y si no esta se crea: lógica en models/user.model.js
         const user = await User.findOrCreate({ googleId: profile.id }, profile);
+        
         return done(null, user);
       } catch (err) {
         console.error("Error al buscar o crear usuario:", err);
